@@ -11,6 +11,7 @@ What does zeplin.py do?
 4. Tracks the game and saves the new odds
 5. Plots the odds vs rounds
 6. Saves the odds history to csv (each 15 rounds)
+7. Plays an alarm sound if odds at last 8 rounds is lower than 1.20 (Will be released)
 
 Program output:
 ![image](https://github.com/akinertu/Zeppelin_Game_History_Tracker/assets/43358488/ec98faea-aa0f-4b5b-906a-ab37bcac62d9)
@@ -18,6 +19,7 @@ Program output:
 
 Odds History Graph:
 ![image](https://github.com/akinertu/Zeppelin_Game_History_Tracker/assets/43358488/eff569d5-7ef9-4fb7-9b1b-6b6df66b08ad)
+
 
 
 
