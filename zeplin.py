@@ -1,3 +1,4 @@
+#Import Libraries
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -10,18 +11,24 @@ from selenium.webdriver import Firefox, FirefoxOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service as FirefoxService
 import pygame
+
+#Loading Alarm Sound
 pygame.mixer.init()  # Initialize the mixer module
 pygame.mixer.music.load('Alarm04.wav')  # Load the sound file
 pygame.mixer.music.play()
 
+#Firefox browser
 options = FirefoxOptions()
 options.binary_location  = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 service=FirefoxService(executable_path='geckodriver.exe')
 
-tc_kimlik_no = '53206524030' #TC Kimlik No 
-bilyoner_password = '137907Fb*' #TC Kimlik No 
+#Bilyoner account information to login
+tc_kimlik_no = '' #TC Kimlik No 
+bilyoner_password = '' #TC Kimlik No 
 
+# Bilyoner Login Function
 def bilyoner_login():
+'''Opens Firefox browser and logins to Bilyoner account'''
     driver = webdriver.Firefox(service=service, options=options)
     time.sleep(3)
     driver.get("https://www.bilyoner.com/sans-oyunlari/zeplin")
@@ -36,11 +43,14 @@ def bilyoner_login():
     driver.switch_to.frame(iframe)
     return driver
 
+# Odds history to csv function
 def saver(insert_time,round_counts,odds):
+'''Saves odds history to csv'''
     df = pd.DataFrame({'insert_time':insert_time, 'round_counts':round_counts,'odds':odds,'get_type':get_type})
     df.to_csv('zeplin.csv', index=False) 
 
 def get_odds_history():
+'''Gets the eisting odds history(last 100 rounds)'''
     odds_history = driver.find_element(By.XPATH, "//app-game-content/div/app-rounds-history/div[1]").get_property("innerText")
     odds_history = odds_history.replace('x','')
     odds_history = odds_history.split('\n')
@@ -48,7 +58,9 @@ def get_odds_history():
     odds_history.reverse()
     return odds_history
 
+
 def history_correction():
+'''Fills missing odds after connection lost'''
     global round_no
     hist = get_odds_history()
     if odds_history[-10:] != hist[-10:]:
@@ -64,8 +76,10 @@ def history_correction():
             insert_time.append(datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
             get_type.append('corrected round')
 
+#Login to bilyoner account
 driver = bilyoner_login()
 
+#Create odd plot
 fig = plt.figure(figsize=(16,12))
 ax = fig.add_subplot(1, 1, 1)
 plt.pause(2)
